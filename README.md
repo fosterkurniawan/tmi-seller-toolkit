@@ -12,11 +12,17 @@ python3 -m http.server 4173 --bind 127.0.0.1 --directory web
 
 Buka http://127.0.0.1:4173. URL lokal tersedia selama server berjalan di Mac ini. File `web/index.html` juga bisa dibuka langsung.
 
-Tidak membutuhkan npm atau build. HTML berisi engine kalkulasi dan workbook bawaan; `web/workspace.css` dan `web/workspace.js` mengatur alur, bantuan input, dan navigasi. Sertakan seluruh folder `web/`, termasuk ilustrasi di `web/assets/`, jika memindahkan website.
+Tidak membutuhkan npm atau build. HTML berisi engine kalkulasi dan workbook bawaan; `web/workspace.css` dan `web/workspace.js` mengatur alur, bantuan input, dan navigasi. `web/theme.css` mengatur palet TikTok Shop, sementara `web/i18n.js` menyediakan terjemahan lokal. Sertakan seluruh folder `web/`, termasuk ilustrasi di `web/assets/`, jika memindahkan website.
 
 ## Tampilan ringkas
 
 Dashboard memakai kartu misi, ikon bergaya 3D, dan ilustrasi ecommerce lokal. Progres 0–3 menghitung alat rencana jualan yang dibuka selama kunjungan ini; kembali ke 0 saat reload. Bantuan input tersedia lewat tombol `?`, tanpa menghilangkan label dan petunjuk pembaca layar.
+
+## Bahasa & tema
+
+Pilih **Indonesia / English** pada header. Pilihan bahasa diingat terpisah dari data hitungan. Formulir, navigasi, bantuan, pesan error, template balasan, dan label CSV mengikuti bahasa; angka tetap dalam rupiah dengan pemisah sesuai bahasa. Angka yang sedang diketik, ID internal, dan nilai status tersimpan tidak berubah. Workbook Excel bawaan tetap berbahasa Indonesia, ditandai pada halaman unduhan.
+
+Palet hitam–putih, merah, dan cyan mengacu pada [situs resmi TikTok Shop](https://seller.tiktok.com/), ditinjau 15 September 2026. Nuansa ini diterapkan pada seluruh halaman dan ilustrasi 3D lokal, dengan identitas toolkit sendiri. [Rancangan dan verifikasi](docs/design/language-tiktok-theme.md).
 
 ## Alur workspace
 

@@ -88,6 +88,7 @@ function refreshWorkspace() {
     ? stale ? 'Biaya berubah. Salin ulang margin produk.' : 'Margin disalin. Perubahan produk tidak otomatis diterapkan.'
     : 'Isi manual atau salin dari produk.';
   $('#roas-source-status').classList.toggle('stale', Boolean(stale));
+  localizeUI();
 }
 
 function updateExploration() {
@@ -109,6 +110,7 @@ function setMenu(open, returnFocus = false) {
   $('#menu').setAttribute('aria-label', open ? 'Tutup menu' : 'Buka menu');
   if (open) requestAnimationFrame(() => $('#sidebar .nav-btn[aria-current="page"]')?.focus());
   else if (returnFocus) $('#menu').focus();
+  localizeUI();
 }
 
 function navigate(page, push = true, focus = true) {
@@ -125,7 +127,7 @@ function navigate(page, push = true, focus = true) {
   });
   $('#crumb').textContent = LABELS[page];
   $('#crumb-group').textContent = pageGroups[page];
-  document.title = LABELS[page] + ' — TMI Seller Toolkit';
+  document.title = translate(LABELS[page]) + ' — TMI Seller Toolkit';
   if (push && location.hash !== '#' + page) history.pushState(null, '', '#' + page);
   setMenu(false);
   if (focus) {
@@ -205,6 +207,7 @@ window.addEventListener('hashchange', () => {
 });
 addJourney();
 renderFields();
+initializeLanguage();
 recalc();
 if (!LABELS[location.hash.slice(1)]) history.replaceState(null, '', '#home');
 navigate(location.hash.slice(1), false, false);
