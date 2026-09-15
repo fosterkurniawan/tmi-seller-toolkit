@@ -12,13 +12,23 @@ python3 -m http.server 4173 --bind 127.0.0.1 --directory web
 
 Buka http://127.0.0.1:4173. URL lokal tersedia selama server berjalan di Mac ini. File `web/index.html` juga bisa dibuka langsung.
 
-Tidak membutuhkan npm atau build: CSS, JavaScript, ikon, dan Excel bawaan berada dalam satu HTML.
+Tidak membutuhkan npm atau build. HTML berisi engine kalkulasi dan workbook bawaan; `web/workspace.css` dan `web/workspace.js` mengatur alur, bantuan input, dan navigasi. Sertakan ketiga file jika memindahkan website.
+
+## Alur workspace
+
+- **Rencana jualan:** Harga & keuntungan → Simulasi diskon → Cek biaya iklan.
+- **Operasional toko:** Rencana stok; Retur & pesan pembeli.
+- **Panduan & unduhan:** Template & hasil; Belajar di TokioTalk; Kenali proteksi; Cara hitung & sumber.
+
+Promo otomatis memakai biaya produk. Halaman iklan dapat menyalin margin produk sebelum biaya iklan lewat tombol eksplisit; perubahan produk berikutnya ditandai agar diperbarui. Stok dan retur memiliki input terpisah. Status simpan berlaku untuk seluruh alat, CSV berisi hasil saat ini, sedangkan Excel merupakan template awal.
+
+Rancangan dan hubungan data dijelaskan di [catatan UX](docs/design/workspace-ux.md). [Hasil pemeriksaan](docs/design/workspace-ux-verification.md) mencakup alur antaralat, penyimpanan, navigasi, unduhan, dan layar kecil.
 
 ## Versi awal
 
 - Source aktif: [web/index.html](web/index.html).
-- Diimpor identik dari `/Users/fosterkurniawan/Downloads/TMI_Seller_Toolkit_Worksite.html`.
-- SHA-256: `ca8b145327399ea351bb453af7e7a4ae0a79513b06de9cc680728d165166a6f4`.
+- Versi impor di commit `96224e4` identik dengan `/Users/fosterkurniawan/Downloads/TMI_Seller_Toolkit_Worksite.html`; versi aktif sudah mendapat penyempurnaan UX.
+- SHA-256 versi impor: `ca8b145327399ea351bb453af7e7a4ae0a79513b06de9cc680728d165166a6f4`.
 - Tampilan file ini memakai hijau gelap, mint, dan putih. Ini baseline dari pengguna; arsip chat juga menyebut versi redesign navy yang berbeda.
 - Fitur: HPP/margin, promo, ROAS, stok, retur/respons, ekspor CSV, Excel 8 sheet, dan edukasi TokioTalk/proteksi.
 - Data disimpan di browser setelah tombol Simpan dipilih. Penyimpanan mengikuti browser dan alamat website.
