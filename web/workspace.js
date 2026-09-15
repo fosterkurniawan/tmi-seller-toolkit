@@ -3,6 +3,8 @@ let savedSnapshot = null;
 let hasSaved = false;
 let roasSnapshot = null;
 const exploredTools = new Set();
+let menuTrigger = null;
+let menuScroll = 0;
 try {
   hasSaved = Boolean(localStorage.getItem(STORE));
   if (hasSaved) savedSnapshot = JSON.stringify(state);
@@ -38,7 +40,7 @@ function fieldMarkup(page, [key, label, unit]) {
     <label class="field-name" for="${page}-${key}">${label}</label>
     <span class="input-wrap ${unit !== 'Rp' ? 'suffix' : ''}">
     ${unit === 'Rp' ? '<b aria-hidden="true">Rp</b>' : ''}
-    <input id="${page}-${key}" data-group="${page}" data-key="${key}" type="number" min="0"
+    <input id="${page}-${key}" data-group="${page}" data-key="${key}" type="number" inputmode="${unit === '%' || key === 'daily' ? 'decimal' : 'numeric'}" min="0"
       max="${unit === '%' ? 100 : 1000000000000}" step="${unit === '%' || key === 'daily' ? 'any' : 1}"
       value="${state[page][key]}" required aria-label="${label}" ${help ? `aria-describedby="help-${page}-${key}"` : ''}>
     ${unit !== 'Rp' ? `<b aria-hidden="true">${unit}</b>` : ''}</span>
@@ -88,6 +90,7 @@ function refreshWorkspace() {
     ? stale ? 'Biaya berubah. Salin ulang margin produk.' : 'Margin disalin. Perubahan produk tidak otomatis diterapkan.'
     : 'Isi manual atau salin dari produk.';
   $('#roas-source-status').classList.toggle('stale', Boolean(stale));
+  renderMobileCards();
   localizeUI();
 }
 
@@ -104,13 +107,30 @@ function updateExploration() {
 }
 
 function setMenu(open, returnFocus = false) {
+  const wasOpen = $('#sidebar').classList.contains('open');
+  open = open && window.matchMedia('(max-width: 880px)').matches;
+  if (open && !wasOpen) {
+    menuTrigger = document.activeElement;
+    menuScroll = window.scrollY;
+    document.body.style.top = `-${menuScroll}px`;
+    document.body.classList.add('menu-open');
+  }
   $('#sidebar').classList.toggle('open', open);
   $('#overlay').classList.toggle('open', open);
-  $('#menu').setAttribute('aria-expanded', String(open));
+  $('.workspace').inert = open;
+  $('#mobile-dock').inert = open;
+  for (const trigger of [$('#menu'), $('#dock-menu')]) {
+    trigger.setAttribute('aria-expanded', String(open));
+  }
   $('#menu').setAttribute('aria-label', open ? 'Tutup menu' : 'Buka menu');
-  if (open) requestAnimationFrame(() => $('#sidebar .nav-btn[aria-current="page"]')?.focus());
-  else if (returnFocus) $('#menu').focus();
+  if (!open && wasOpen) {
+    document.body.classList.remove('menu-open');
+    document.body.style.top = '';
+    window.scrollTo({top: menuScroll, behavior: 'instant'});
+    if (returnFocus) menuTrigger?.focus({preventScroll: true});
+  }
   localizeUI();
+  if (open) $('#close-menu').focus({preventScroll: true});
 }
 
 function navigate(page, push = true, focus = true) {
@@ -119,11 +139,17 @@ function navigate(page, push = true, focus = true) {
   if (['margin', 'promo', 'roas'].includes(page)) exploredTools.add(page);
   updateExploration();
   $$('.page').forEach(el => el.classList.toggle('active', el.id === 'page-' + page));
-  $$('.nav-btn, .journey-step').forEach(el => {
+  $$('.nav-btn, .journey-step, .operation-step').forEach(el => {
     const selected = el.dataset.page === page;
     el.classList.toggle('active', selected);
     if (selected) el.setAttribute('aria-current', 'page');
     else el.removeAttribute('aria-current');
+  });
+  $$('#mobile-dock [data-section]').forEach(button => {
+    const selected = button.dataset.section.split(' ').includes(page);
+    button.classList.toggle('active', selected);
+    if (selected) button.setAttribute('aria-current', button.dataset.page === page ? 'page' : 'true');
+    else button.removeAttribute('aria-current');
   });
   $('#crumb').textContent = LABELS[page];
   $('#crumb-group').textContent = pageGroups[page];
@@ -196,7 +222,7 @@ document.addEventListener('click', e => {
   const target = $(link.getAttribute('href'));
   target.setAttribute('tabindex', '-1');
   target.focus({preventScroll: true});
-  target.scrollIntoView({behavior: 'smooth', block: 'start'});
+  target.scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'start'});
 });
 window.addEventListener('popstate', () => navigate(location.hash.slice(1), false));
 window.matchMedia('(min-width: 881px)').addEventListener('change', e => {
@@ -206,8 +232,62 @@ window.addEventListener('hashchange', () => {
   if (LABELS[location.hash.slice(1)]) navigate(location.hash.slice(1), false);
 });
 addJourney();
+initializeMobile();
 renderFields();
+$$('input[type="number"]:not([inputmode])').forEach(input => input.inputMode = 'numeric');
 initializeLanguage();
 recalc();
 if (!LABELS[location.hash.slice(1)]) history.replaceState(null, '', '#home');
 navigate(location.hash.slice(1), false, false);
+
+
+function initializeMobile() {
+  const dock = document.createElement('nav');
+  dock.id = 'mobile-dock';
+  dock.className = 'mobile-dock';
+  dock.setAttribute('aria-label', 'Navigasi cepat');
+  dock.innerHTML = `
+    <button data-page="home" data-section="home">${icon('grid')}<span>Beranda</span></button>
+    <button data-page="margin" data-section="margin promo roas">${icon('calc')}<span>Jualan</span></button>
+    <button data-page="stock" data-section="stock returns">${icon('box')}<span>Toko</span></button>
+    <button id="dock-menu" aria-controls="sidebar" aria-expanded="false" data-section="templates webinar protection sources">${icon('menu')}<span>Menu</span></button>`;
+  document.body.append(dock);
+  $('#dock-menu').addEventListener('click', () => setMenu(true));
+  for (const page of ['stock', 'returns']) {
+    const tabs = document.createElement('nav');
+    tabs.className = 'operation-nav';
+    tabs.setAttribute('aria-label', 'Operasional toko');
+    tabs.innerHTML = `<button class="operation-step" data-page="stock">${icon('box')}<span>Stok</span></button>
+      <button class="operation-step" data-page="returns">${icon('chat')}<span>Retur & balasan</span></button>`;
+    $('#page-'+page).prepend(tabs);
+  }
+  for (const [id, label] of [['promo', 'Bandingkan skenario promo'], ['return', 'Biaya keluhan & retur']]) {
+    const table = $('#'+id+'-table').closest('.table-wrap');
+    table.classList.add('desktop-results');
+    const cards = document.createElement('div');
+    cards.id = id+'-cards';
+    cards.className = 'mobile-cards';
+    cards.setAttribute('role', 'list');
+    cards.setAttribute('aria-label', label);
+    table.after(cards);
+  }
+}
+
+function renderMobileCards() {
+  const promoLabels = ['Harga setelah diskon', 'Keuntungan / item', 'Margin', 'Keuntungan total'];
+  const returnLabels = ['Ongkir kirim', 'Ongkir retur', 'Biaya lain', 'Biaya diganti', 'Sisa biaya'];
+  // Cells already contain escaped user text; copying also preserves data-no-i18n on order IDs.
+  for (const kind of ['promo', 'return']) {
+    $('#'+kind+'-cards').innerHTML = Array.from($('#'+kind+'-table').rows).map(row => {
+      const cells = Array.from(row.cells);
+      if (cells.length === 1) return `<div class="empty" role="listitem">${cells[0].innerHTML}</div>`;
+      const promo = kind === 'promo';
+      const labels = promo ? promoLabels : returnLabels;
+      return `<article class="mobile-result-card ${row.className}" role="listitem">
+        <header><h3>${promo ? '<span>Diskon</span> ' : ''}${cells[0].innerHTML}</h3>${cells[promo ? 5 : 6].innerHTML}</header>
+        <dl>${labels.map((label, index) => `<div><dt>${label}</dt><dd>${cells[index+1].innerHTML}</dd></div>`).join('')}</dl>
+        ${promo ? '' : `<footer>${cells[7].innerHTML}</footer>`}
+      </article>`;
+    }).join('');
+  }
+}

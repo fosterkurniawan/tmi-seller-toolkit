@@ -1,5 +1,7 @@
 /* Local, explicit translations. IDs and stored calculator data never change language. */
 const EN = {
+  'Navigasi cepat':'Quick navigation', 'Beranda':'Home', 'Jualan':'Selling', 'Toko':'Store',
+  'Stok':'Stock', 'Retur & balasan':'Returns & replies',
   'Lewati menu, ke isi halaman':'Skip navigation, go to content',
   'Tutup menu':'Close menu', 'Tutup menu navigasi':'Close navigation menu', 'Buka menu':'Open menu', 'Menu ruang kerja':'Workspace menu',
   'Mulai di sini':'Start here', 'Harga & keuntungan':'Pricing & profit', 'Simulasi diskon':'Discount planner',

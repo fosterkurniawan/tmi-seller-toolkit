@@ -12,7 +12,19 @@ python3 -m http.server 4173 --bind 127.0.0.1 --directory web
 
 Buka http://127.0.0.1:4173. URL lokal tersedia selama server berjalan di Mac ini. File `web/index.html` juga bisa dibuka langsung.
 
-Tidak membutuhkan npm atau build. HTML berisi engine kalkulasi dan workbook bawaan; `web/workspace.css` dan `web/workspace.js` mengatur alur, bantuan input, dan navigasi. `web/theme.css` mengatur palet TikTok Shop, sementara `web/i18n.js` menyediakan terjemahan lokal. Sertakan seluruh folder `web/`, termasuk ilustrasi di `web/assets/`, jika memindahkan website.
+### Buka dari HP / tablet
+
+Hubungkan HP dan Mac ke Wi-Fi yang sama. Jalankan server dengan akses jaringan lokal:
+
+```sh
+python3 -m http.server 4173 --bind 0.0.0.0 --directory web
+```
+
+Cari IP Mac dengan `ipconfig getifaddr en0`, lalu buka `http://IP-MAC:4173` di browser HP. Server dan Mac harus tetap menyala. `127.0.0.1` pada HP menunjuk ke HP itu sendiri. Alamat jaringan lokal ini bukan hosting publik.
+
+Navigasi bawah muncul di layar sampai 880px, dengan akses Beranda, Jualan, Toko, dan semua menu. Tabel diskon/retur menjadi kartu sampai 600px. Form memakai ukuran sentuh yang lebih besar, keyboard angka, dan modal yang dapat digulir. Data tersimpan tetap mengikuti browser dan alamat website; data Mac tidak otomatis tersinkron ke HP.
+
+Tidak membutuhkan npm atau build. HTML berisi engine kalkulasi dan workbook bawaan; `web/workspace.css` dan `web/workspace.js` mengatur alur, bantuan input, dan navigasi. `web/mobile.css` mengatur pengalaman HP dan tablet. `web/theme.css` mengatur palet TikTok Shop, sementara `web/i18n.js` menyediakan terjemahan lokal. Sertakan seluruh folder `web/`, termasuk ilustrasi di `web/assets/`, jika memindahkan website.
 
 ## Tampilan ringkas
 
