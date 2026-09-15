@@ -19,3 +19,13 @@
 ## Batas pemeriksaan
 
 Ini verifikasi fungsi dan pengalaman menggunakan prototype lokal, bukan audit tarif marketplace, akurasi asuransi, atau kepatuhan aksesibilitas menyeluruh. Data simulasi bukan data aktual toko.
+
+## Verifikasi penyegaran visual
+
+- Dashboard diperiksa secara visual pada viewport 320, 390, 768, dan 1440 piksel; beranda pada 320 dan 768 tidak melebar horizontal.
+- Formulir harga diperiksa di layar 320 dan desktop. Tombol info membuka bantuan tanpa mengubah input.
+- Harga Rp120.000 menghasilkan Rp33.710 per item; tabel diskon 10% memakai hasil yang sama. Penyalinan margin produk 35,84% ke alat iklan menghasilkan Rp1.584.259 setelah iklan.
+- Membuka tiga alat rencana jualan menghasilkan progres 3/3 dan label “Buka lagi”. Reload mengembalikan progres 0/3 dan angka contoh yang belum disimpan.
+- Ilustrasi lokal berhasil dimuat (lebar asli 1312px). Log browser tidak memuat error atau warning pada pemeriksaan akhir.
+- Empat fungsi kalkulasi dan workbook tertanam identik dengan commit sebelumnya. JavaScript inline dan `workspace.js` lolos `node --check`; `git diff --check` bersih.
+- Input pemeriksaan tidak disimpan ke penyimpanan pengguna. Preview dikembalikan ke beranda dengan viewport bawaan.

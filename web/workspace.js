@@ -2,6 +2,7 @@
 let savedSnapshot = null;
 let hasSaved = false;
 let roasSnapshot = null;
+const exploredTools = new Set();
 try {
   hasSaved = Boolean(localStorage.getItem(STORE));
   if (hasSaved) savedSnapshot = JSON.stringify(state);
@@ -33,26 +34,27 @@ const fieldHelp = {
 
 function fieldMarkup(page, [key, label, unit]) {
   const help = fieldHelp[key];
-  return `<label class="field ${page === 'roas' && key === 'margin' ? 'full' : ''}">
-    <span>${label}</span><span class="input-wrap ${unit !== 'Rp' ? 'suffix' : ''}">
+  return `<div class="field ${page === 'roas' && key === 'margin' ? 'full' : ''}">
+    <label class="field-name" for="${page}-${key}">${label}</label>
+    <span class="input-wrap ${unit !== 'Rp' ? 'suffix' : ''}">
     ${unit === 'Rp' ? '<b aria-hidden="true">Rp</b>' : ''}
     <input id="${page}-${key}" data-group="${page}" data-key="${key}" type="number" min="0"
       max="${unit === '%' ? 100 : 1000000000000}" step="${unit === '%' || key === 'daily' ? 'any' : 1}"
       value="${state[page][key]}" required aria-label="${label}" ${help ? `aria-describedby="help-${page}-${key}"` : ''}>
     ${unit !== 'Rp' ? `<b aria-hidden="true">${unit}</b>` : ''}</span>
-    ${help ? `<small id="help-${page}-${key}">${help}</small>` : ''}</label>`;
+    ${help ? `<details class="field-hint"><summary aria-label="Info ${label}">?</summary><small id="help-${page}-${key}">${help}</small></details>` : ''}</div>`;
 }
 
 function renderFields() {
   const groups = [
-    ['Harga produk', 'Harga dan diskon yang akan kamu tawarkan.', ['price', 'discount']],
-    ['Modal & operasional', 'Biaya rupiah untuk setiap item yang terjual.', ['cogs', 'pack', 'ship', 'other']],
-    ['Biaya penjualan', 'Isi berdasarkan biaya yang benar-benar ditanggung tokomu.', ['fixed', 'admin', 'affiliate', 'service', 'ads']],
-    ['Target keuntungan', 'Tentukan margin yang ingin kamu sisakan.', ['target']]
+    ['Harga produk', ['price', 'discount']],
+    ['Modal & operasional', ['cogs', 'pack', 'ship', 'other']],
+    ['Biaya penjualan', ['fixed', 'admin', 'affiliate', 'service', 'ads']],
+    ['Target keuntungan', ['target']]
   ];
-  $('#margin-form').innerHTML = groups.map(([title, desc, keys], index) =>
+  $('#margin-form').innerHTML = groups.map(([title, keys], index) =>
     `<fieldset class="input-section"><legend><span>${index + 1}</span>${title}</legend>
-    <p>${desc}</p><div class="form-grid">${keys.map(key => fieldMarkup('margin', specs.margin.find(f => f[0] === key))).join('')}</div></fieldset>`
+    <div class="form-grid">${keys.map(key => fieldMarkup('margin', specs.margin.find(f => f[0] === key))).join('')}</div></fieldset>`
   ).join('');
   for (const page of ['roas', 'stock']) $('#'+page+'-form').innerHTML = specs[page].map(f => fieldMarkup(page, f)).join('');
   $('#promo-units').value = state.units;
@@ -61,7 +63,7 @@ function renderFields() {
 function refreshWorkspace() {
   const serialized = JSON.stringify(state);
   const changed = hasSaved ? serialized !== savedSnapshot : serialized !== JSON.stringify(DEFAULTS);
-  const status = changed ? 'Perubahan belum disimpan' : hasSaved ? 'Tersimpan di perangkat' : 'Angka contoh · belum disimpan';
+  const status = changed ? 'Belum disimpan' : hasSaved ? 'Tersimpan' : 'Angka contoh';
   $('#save-status').textContent = status;
   $('#save-status').classList.toggle('unsaved', changed);
   const m = marginCalc(state.margin);
@@ -69,25 +71,35 @@ function refreshWorkspace() {
     ? '<span>Periksa input harga & biaya</span>'
     : `<span>Keuntungan / item <b>${rupiah(m.after)}</b></span><a href="#margin-result">Lihat rincian ↓</a>`;
   $('#home-summary').innerHTML = m.error
-    ? `<span class="badge gray">${status}</span><h3>Periksa angka produkmu</h3><p>${m.error}</p><button class="btn ghost" data-page="margin">Perbaiki input</button>`
-    : `<span class="badge gray">${hasSaved || changed ? 'Hitungan produk saat ini' : 'Contoh hitungan · bisa diubah'}</span>
-       <p>Keuntungan per item setelah biaya</p><strong>${rupiah(m.after)}</strong>
-       <span>${percent(m.ratio)} dari harga setelah diskon</span>
-       <div class="summary-detail"><span>Harga setelah diskon</span><b>${rupiah(m.net)}</b></div>
-       <small>Belum termasuk pajak atau overhead yang tidak kamu input.</small>`;
-  $('#promo-origin').textContent = m.error ? 'Input harga atau biaya belum valid. Perbaiki di langkah 1 sebelum membandingkan diskon.'
-    : `Harga awal ${rupiah(state.margin.price)} / item · modal produk ${rupiah(state.margin.cogs)} · target margin ${percent(m.t)}.`;
+    ? `<span class="summary-orb" aria-hidden="true">!</span><div><b>Periksa angka produkmu</b><small>${m.error}</small></div><button class="btn ghost" data-page="margin">Perbaiki</button>`
+    : `<span class="summary-orb" aria-hidden="true">↗</span><div class="summary-profit"><small>Keuntungan / item <span class="badge gray">${hasSaved || changed ? 'Inputmu' : 'Contoh'}</span></small><strong>${rupiah(m.after)}</strong></div>
+       <div class="summary-margin"><small>Margin</small><b>${percent(m.ratio)}</b></div>
+       <button class="summary-link" data-page="margin" aria-label="Lihat rincian keuntungan">Rincian ↗</button>`;
+  $('#promo-origin').textContent = m.error ? 'Periksa harga & biaya di langkah 1.'
+    : `Harga ${rupiah(state.margin.price)} · HPP ${rupiah(state.margin.cogs)} · target ${percent(m.t)}`;
   const ratio = m.error ? NaN : m.before / m.net * 100;
   const canUse = Number.isFinite(ratio) && ratio > 0 && ratio <= 100;
   $('#roas-origin').textContent = canUse
-    ? `Dari hitungan produkmu: margin sebelum iklan ${number(ratio, 2)}% pada harga setelah diskon ${rupiah(m.net)}.`
-    : 'Margin produk belum bisa dipakai: periksa input dan pastikan keuntungan sebelum iklan lebih besar dari nol.';
+    ? `Margin produk sebelum iklan: ${number(ratio, 2)}%`
+    : 'Margin produk harus positif. Periksa harga & biaya.';
   $('#use-product-margin').disabled = !canUse;
   const stale = roasSnapshot && roasSnapshot !== JSON.stringify(state.margin);
   $('#roas-source-status').textContent = roasSnapshot
-    ? stale ? 'Harga atau biaya produk berubah. Klik “Gunakan margin produk” lagi untuk memperbarui.' : 'Menggunakan salinan margin produk. Perubahan berikutnya tidak diterapkan otomatis.'
-    : 'Margin iklan diisi terpisah. Kamu bisa mengetiknya sendiri atau memakai angka produk di atas.';
+    ? stale ? 'Biaya berubah. Salin ulang margin produk.' : 'Margin disalin. Perubahan produk tidak otomatis diterapkan.'
+    : 'Isi manual atau salin dari produk.';
   $('#roas-source-status').classList.toggle('stale', Boolean(stale));
+}
+
+function updateExploration() {
+  $('#quest-count').textContent = `${exploredTools.size}/3 alat dijelajahi`;
+  $('#quest-progress').value = exploredTools.size;
+  $$('.journey-card').forEach(card => {
+    const seen = exploredTools.has(card.dataset.page);
+    card.classList.toggle('explored', seen);
+    card.querySelector('.mission-action').textContent = seen ? 'Buka lagi' : 'Mulai';
+    card.querySelector('.step-number').textContent = seen ? '✓' : String(['margin','promo','roas'].indexOf(card.dataset.page)+1).padStart(2, '0');
+    card.querySelector('.step-number').setAttribute('aria-label', seen ? 'Sudah dibuka' : 'Langkah '+card.querySelector('.step-number').textContent);
+  });
 }
 
 function setMenu(open, returnFocus = false) {
@@ -102,6 +114,8 @@ function setMenu(open, returnFocus = false) {
 function navigate(page, push = true, focus = true) {
   if (!LABELS[page]) page = 'home';
   current = page;
+  if (['margin', 'promo', 'roas'].includes(page)) exploredTools.add(page);
+  updateExploration();
   $$('.page').forEach(el => el.classList.toggle('active', el.id === 'page-' + page));
   $$('.nav-btn, .journey-step').forEach(el => {
     const selected = el.dataset.page === page;
@@ -137,16 +151,16 @@ function addJourney() {
   peek.className = 'margin-peek';
   $('#page-margin .calc-layout').before(peek);
   const next = {
-    margin: ['Lanjutkan dengan biaya produk ini', 'Bandingkan beberapa diskon tanpa mengisi ulang modal dan biaya.', 'promo', 'Lanjut ke simulasi diskon'],
-    promo: ['Sudah tahu batas diskonmu?', 'Cek biaya iklan berikutnya. Untuk menilai satu diskon tertentu, ubah diskon produk di langkah 1 terlebih dahulu.', 'roas', 'Lanjut ke biaya iklan'],
-    roas: ['Siapkan produk yang akan dijual', 'Cek persediaan menggunakan penjualan harian dan waktu tunggu restock.', 'stock', 'Buka rencana stok'],
-    stock: ['Simpan hasil untuk persiapan jualan', 'Unduh hitungan stokmu atau lanjutkan di template Excel.', 'templates', 'Buka hasil & template'],
-    returns: ['Pelajari risiko yang relevan', 'Kenali produk proteksi dan batasannya. Catatan retur bukan pengajuan klaim.', 'protection', 'Kenali proteksi']
+    margin: ['Lanjut ke diskon?', '', 'promo', 'Simulasikan →'],
+    promo: ['Sekarang, cek iklannya.', 'Ubah diskon di langkah 1 untuk memakainya di hitungan iklan.', 'roas', 'Cek iklan →'],
+    roas: ['Siapkan stoknya.', '', 'stock', 'Cek stok →'],
+    stock: ['Bawa hasilmu.', '', 'templates', 'Unduh hasil →'],
+    returns: ['Kenali pilihan proteksi.', 'Catatan retur bukan pengajuan klaim.', 'protection', 'Pelajari →']
   };
   for (const [page, [title, desc, dest, label]] of Object.entries(next)) {
     const section = document.createElement('div');
     section.className = 'next-action';
-    section.innerHTML = `<div><h2>${title}</h2><p>${desc}</p></div><button class="btn primary" data-page="${dest}">${label} <span aria-hidden="true">→</span></button>`;
+    section.innerHTML = `<div><h2>${title}</h2>${desc ? `<p>${desc}</p>` : ''}</div><button class="btn primary" data-page="${dest}">${label}</button>`;
     $('#page-'+page).append(section);
   }
 }

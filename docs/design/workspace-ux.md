@@ -31,3 +31,12 @@ Navigasi mendukung browser Back/Forward, fokus judul setelah pindah halaman, ser
 ## Verifikasi
 
 Periksa hubungan harga→promo, snapshot margin sebelum iklan→ROAS termasuk status usang/manual, validasi angka, navigasi/back/forward, penyimpanan, ekspor dan file Excel tetap tersedia, serta layout desktop/320/768/1024. Verifikasi rumus inti tidak berubah. Tidak mengubah tarif, isi produk proteksi, workbook atau integrasi eksternal.
+
+## Penyegaran visual — 15 September 2026
+
+- Beranda mengutamakan satu aksi, “Hitung sekarang”, diikuti ringkasan keuntungan dan tiga kartu alat.
+- Nuansa gamification berupa kartu misi, angka langkah, tanda sudah dibuka, serta progres eksplorasi. Progres menghitung alat yang dikunjungi dalam sesi halaman dan direset saat reload, bukan menilai kinerja bisnis.
+- Ilustrasi ecommerce 3D dibuat khusus dan disimpan di `web/assets/seller-3d.png`. Ikon kategori memakai SVG lokal dengan kedalaman melalui CSS.
+- Palet mint, coral, lavender, dan emas di atas sidebar putih. Tidak membutuhkan layanan gambar eksternal.
+- Deskripsi pendek ditampilkan langsung; penjelasan input dapat dibuka melalui `?`. Label, satuan, dan hubungan antaralat tetap tersedia.
+- Tampilan menyesuaikan ponsel, tablet, dan desktop; efek transisi mengikuti preferensi reduced motion.

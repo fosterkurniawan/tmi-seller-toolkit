@@ -12,7 +12,11 @@ python3 -m http.server 4173 --bind 127.0.0.1 --directory web
 
 Buka http://127.0.0.1:4173. URL lokal tersedia selama server berjalan di Mac ini. File `web/index.html` juga bisa dibuka langsung.
 
-Tidak membutuhkan npm atau build. HTML berisi engine kalkulasi dan workbook bawaan; `web/workspace.css` dan `web/workspace.js` mengatur alur, bantuan input, dan navigasi. Sertakan ketiga file jika memindahkan website.
+Tidak membutuhkan npm atau build. HTML berisi engine kalkulasi dan workbook bawaan; `web/workspace.css` dan `web/workspace.js` mengatur alur, bantuan input, dan navigasi. Sertakan seluruh folder `web/`, termasuk ilustrasi di `web/assets/`, jika memindahkan website.
+
+## Tampilan ringkas
+
+Dashboard memakai kartu misi, ikon bergaya 3D, dan ilustrasi ecommerce lokal. Progres 0–3 menghitung alat rencana jualan yang dibuka selama kunjungan ini; kembali ke 0 saat reload. Bantuan input tersedia lewat tombol `?`, tanpa menghilangkan label dan petunjuk pembaca layar.
 
 ## Alur workspace
 
