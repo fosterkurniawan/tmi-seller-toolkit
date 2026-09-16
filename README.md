@@ -1,5 +1,11 @@
 # Toolkit Seller
 
+## Hosting Sites
+
+[Buka TMI Seller Toolkit](https://tmi-seller-toolkit.tmisquadgenai.chatgpt.site) — hosting publik tanpa perlu laptop menyala. Hosting termasuk dalam kuota beta akun Sites. Form dan daftar nomor akses tetap sama. Data tersimpan pada alamat lama tidak otomatis berpindah ke alamat ini.
+
+Panduan pembaruan: [Sites hosting](docs/design/sites-hosting.md).
+
 Website **TMI Seller Toolkit — Ruang Kerja Seller**, diimpor dari HTML pengguna pada 15 September 2026.
 
 ## Buka website
