@@ -26,6 +26,33 @@ Navigasi bawah muncul di layar sampai 880px, dengan akses Beranda, Jualan, Toko,
 
 Tidak membutuhkan npm atau build. HTML berisi engine kalkulasi dan workbook bawaan; `web/workspace.css` dan `web/workspace.js` mengatur alur, bantuan input, dan navigasi. `web/mobile.css` mengatur pengalaman HP dan tablet. `web/theme.css` mengatur palet TikTok Shop, sementara `web/i18n.js` menyediakan terjemahan lokal. Sertakan seluruh folder `web/`, termasuk ilustrasi di `web/assets/`, jika memindahkan website.
 
+## Akses internet — pola Dashboard S1
+
+Toolkit memakai **Cloudflare Quick Tunnel**, dengan server khusus yang hanya menyajikan folder `web/`. Server publik memakai `127.0.0.1:4174`; preview lokal 4173 tetap terpisah.
+
+Alamat aktif tersedia di `.runtime/public_url.txt`:
+
+```sh
+cat .runtime/public_url.txt
+```
+
+Mac harus menyala, login, dan terhubung internet. HP tidak perlu berada di Wi-Fi yang sama. Alamat Quick Tunnel dapat berubah setelah tunnel dimulai ulang; data browser pada alamat sebelumnya tidak otomatis pindah. Ini akses demo publik dengan HTTPS, tanpa jaminan uptime, bukan hosting permanen. [Dokumentasi Cloudflare](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/do-more-with-tunnels/trycloudflare/).
+
+Layanan `com.seller-toolkit.serve` dan `com.seller-toolkit.tunnel` dikelola oleh LaunchAgent: mulai saat login dan dijalankan ulang jika proses berhenti. Untuk memasang kembali dari folder proyek:
+
+```sh
+python3 tools/install_public_access.py
+```
+
+Log ada di `~/Library/Logs/seller-toolkit/`. Untuk menutup akses publik:
+
+```sh
+launchctl bootout gui/$(id -u)/com.seller-toolkit.tunnel
+launchctl bootout gui/$(id -u)/com.seller-toolkit.serve
+```
+
+Dua file `com.seller-toolkit.*.plist` di `~/Library/LaunchAgents/` perlu dipindahkan keluar folder itu jika ingin menonaktifkan mulai otomatis pada login berikutnya. Tidak ada perubahan pada layanan, token, atau notifikasi Telegram Dashboard S1. Toolkit berisi angka contoh; input pengguna hanya tersimpan di browser masing-masing.
+
 ## Tampilan ringkas
 
 Dashboard memakai kartu misi, ikon bergaya 3D, dan ilustrasi ecommerce lokal. Progres 0–3 menghitung alat rencana jualan yang dibuka selama kunjungan ini; kembali ke 0 saat reload. Bantuan input tersedia lewat tombol `?`, tanpa menghilangkan label dan petunjuk pembaca layar.
