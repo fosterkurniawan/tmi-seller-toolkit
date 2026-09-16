@@ -34,3 +34,9 @@ Tidak mengubah ketentuan polis, tidak menghubungkan marketplace/CRM, dan tidak m
 ## Rilis publik
 
 Dipasang ke folder `web/` yang dilayani origin 4174 tanpa mengganti tunnel. HTTP publik untuk index, form, engine, UI, dan terjemahan mengembalikan 200 dengan byte identik dengan file proyek. Browser publik berhasil masuk melalui form, menjalankan contoh Rp300/Rp29.700/harga target Rp85.292, menampilkan premi promo 0–25%, mengganti ID/EN, lalu keluar. Tidak ada warning/error console selama pemeriksaan alur publik. Viewport pengujian dikembalikan ke ukuran normal.
+
+## Ringkasan proteksi di kalkulator
+
+Judul halaman, label navigasi, rujukan promo, dan label ekspor kini memakai **Harga dan keuntungan** (Pricing & profit / 定价与利润). Area biaya proteksi memuat ringkasan Cargo, Freshness, dan Trial berdasarkan materi yang sudah ada pada halaman Kenali proteksi, manfaat mengurangi beban biaya kejadian yang dijamin, serta alasan memasukkan premi ke margin dan harga target. Tombol rincian menuju halaman Kenali proteksi. Ringkasan menyatakan cakupan bergantung program dan simulasi 0,3% tidak berarti paket ketiga produk atau aktivasi polis. Tidak mengubah rumus, tarif, data tersimpan, ataupun ketentuan produk.
+
+Verifikasi: 9 tes terjemahan/perhitungan lulus; syntax protection.js valid. Browser staging: judul dan ringkasan diterjemahkan ke ID/EN/中文; tombol rincian membuka halaman proteksi. Contoh premi ON Rp300 / keuntungan Rp29.700, OFF Rp0 / keuntungan Rp30.000. Tidak ada overflow pada 320/768/1024/1440px; screenshot desktop dan HP light/dark diperiksa. Console tanpa warning/error. Ukuran layar diuji melalui emulasi browser.

@@ -65,7 +65,7 @@ Palet hitam–putih, merah, dan cyan mengacu pada [situs resmi TikTok Shop](http
 
 ## Alur workspace
 
-- **Rencana jualan:** Harga & proteksi → Simulasi diskon → Cek biaya iklan.
+- **Rencana jualan:** Harga dan keuntungan → Simulasi diskon → Cek biaya iklan.
 - **Operasional toko:** Rencana stok; Retur & pesan pembeli.
 - **Panduan & unduhan:** Template & hasil; Belajar di TokioTalk; Kenali proteksi; Biaya & referensi; Cara hitung & sumber.
 

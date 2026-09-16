@@ -11,8 +11,19 @@ function initializeProtection() {
     <div class="form-grid"><label class="field"><span>Total operasional / bulan</span><span class="input-wrap"><b>Rp</b><input id="ops-monthly" type="number" inputmode="decimal" min="0" max="1000000000000" step="any" placeholder="1500000"></span></label>
     <label class="field"><span>Item terjual / bulan</span><span class="input-wrap"><input id="ops-units" type="number" inputmode="numeric" min="1" max="100000000" step="1" placeholder="300"></span></label></div>
     <div class="ops-total"><span>Alokasi / item <b id="ops-suggestion">—</b></span><button class="btn ghost" id="apply-operations" type="button" disabled>Gunakan alokasi</button></div><p class="form-note" id="ops-message" role="status">Dibulatkan ke atas ke Rp0,01.</p></details>
-    <section class="protection-input" aria-labelledby="protection-title"><div class="protection-top"><h2 id="protection-title">Biaya proteksi</h2><label class="protection-toggle"><input id="insurance-enabled" type="checkbox" role="switch"><span>Masukkan premi</span></label></div>
-    <div class="premium-rate"><b>0,3%</b><span>Harga neto · dibayar seller</span></div><p class="form-note">Tarif untuk simulasi. Menyalakannya tidak mengaktifkan polis.</p><div id="premium-allocation"></div></section>`;
+    <section class="protection-input" aria-labelledby="protection-title"><div class="protection-top"><h2 id="protection-title">Biaya proteksi</h2><label class="protection-toggle"><input id="insurance-enabled" type="checkbox" role="switch" aria-describedby="protection-why protection-simulation"><span>Masukkan premi</span></label></div>
+    <div class="premium-rate"><b>0,3%</b><span>Harga neto · dibayar seller</span></div><div class="protection-summary">
+      <h3>Pilihan cakupan di toolkit</h3>
+      <p>Membantu mengurangi beban biaya dari kejadian yang dijamin, sesuai ketentuan program.</p>
+      <dl class="coverage-list">
+        <div><dt>TTS Cargo</dt><dd>Biaya kirim tertentu untuk retur, refund, atau gagal kirim.</dd></div>
+        <div><dt>TTS Freshness</dt><dd>Kejadian tertentu pada buah yang memenuhi syarat.</dd></div>
+        <div><dt>TTS Trial</dt><dd>Refund setelah percobaan terbatas produk parfum, makeup, atau personal care tertentu.</dd></div>
+      </dl>
+      <p class="form-note">Cakupan, limit, dan pengecualian berbeda tiap program. Simulasi 0,3% bukan paket ketiga proteksi.</p>
+      <button class="btn ghost small coverage-details" type="button" data-page="protection">Lihat manfaat & ketentuan →</button>
+      <div class="protection-reason"><h3>Mengapa premi perlu dihitung?</h3><p id="protection-why">Nyalakan agar premi masuk ke biaya, margin, dan harga target. Jadi, keuntungan tidak terlihat lebih besar dari kondisi sebenarnya.</p></div>
+    </div><p class="form-note" id="protection-simulation">Tarif untuk simulasi. Menyalakannya tidak mengaktifkan polis.</p><div id="premium-allocation"></div></section>`;
   $('#margin-form').after(extras);
   const resultColumn=$('#page-margin .calc-layout').lastElementChild;
   resultColumn.insertAdjacentHTML('beforeend','<div class="panel protection-compare" id="insurance-comparison"></div><div class="panel price-recommendation" id="price-recommendation"></div>');
@@ -62,6 +73,6 @@ function renderPromotions(){
   const results=[0,.05,.1,.15,.2,.25].map(d=>promoCalc(state.margin,d,state.units));const error=results.find(r=>r.error)?.error;showError('promo',error);
   if(error){$('#promo-stats').innerHTML='';$('#promo-table').innerHTML='';return;}
   const m=marginCalc(state.margin);
-  $('#promo-stats').innerHTML=`<div class="stat-card"><small>Harga jual sebelum diskon</small><b>${rupiah(state.margin.price)}</b><p>Dari Harga & proteksi</p></div><div class="stat-card"><small>Target keuntungan (%)</small><b>${percent(m.t)}</b><p>Dari harga setelah diskon</p></div><div class="stat-card"><small>Proteksi</small><b>${m.enabled?'ON':'OFF'}</b><p>Premi dihitung ulang untuk setiap diskon.</p></div>`;
+  $('#promo-stats').innerHTML=`<div class="stat-card"><small>Harga jual sebelum diskon</small><b>${rupiah(state.margin.price)}</b><p>Dari Harga dan keuntungan</p></div><div class="stat-card"><small>Target keuntungan (%)</small><b>${percent(m.t)}</b><p>Dari harga setelah diskon</p></div><div class="stat-card"><small>Proteksi</small><b>${m.enabled?'ON':'OFF'}</b><p>Premi dihitung ulang untuk setiap diskon.</p></div>`;
   $('#promo-table').innerHTML=results.map(r=>{const good=r.ratio+1e-10>=r.t;return `<tr class="${good?'good':r.after<0?'bad':''}"><td><b>${percent(r.discount)}</b></td><td class="num">${rupiah(r.net)}</td><td class="num">${rupiah(r.sellerPremium)}</td><td class="num">${rupiah(r.after)}</td><td class="num">${percent(r.ratio)}</td><td class="num">${rupiah(r.total)}</td><td><span class="tag ${good?'good':'warn'}">${good?'Tercapai':'Di bawah target'}</span></td></tr>`;}).join('');
 }
