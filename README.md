@@ -118,6 +118,6 @@ Verifikasi: `node --test tests/*.test.cjs` (10 tes), pemeriksaan syntax seluruh 
 
 ### Pembatasan nomor sementara
 
-Form awal sekarang hanya menerima empat nomor yang ditentukan pengguna. Format `08…`, `62…`, dan `+62…` dinormalisasi; nomor lain menahan submit. Versi penanda sesi dinaikkan sehingga penanda lama tidak diterima setelah halaman memuat versi baru. Nomor yang diinput tidak ditambahkan ke penanda sesi atau dikirim ke server.
+Form awal sekarang hanya menerima lima nomor yang ditentukan pengguna. Format `08…`, `62…`, dan `+62…` dinormalisasi; nomor lain menahan submit. Versi penanda sesi dinaikkan sehingga penanda lama tidak diterima setelah halaman memuat versi baru. Nomor yang diinput tidak ditambahkan ke penanda sesi atau dikirim ke server.
 
 Pembatasan ini adalah filter form pada prototype statis, **bukan otorisasi server atau verifikasi kepemilikan nomor**. Daftar dan logika berada pada JavaScript klien, sehingga tidak boleh diperlakukan sebagai batas keamanan. Pengamanan akses sebenarnya memerlukan backend dan verifikasi seperti OTP.

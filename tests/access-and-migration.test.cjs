@@ -42,13 +42,13 @@ test('valid loss scenario remains saveable while linked ROAS cannot break even',
 });
 
 
-test('temporary phone gate admits only the four approved numbers and equivalent Indonesian formats',()=>{
- for(const number of ['081334544432','087888890005','0818944567','08777753221']){
+test('temporary phone gate admits only the five approved numbers and equivalent Indonesian formats',()=>{
+ for(const number of ['081334544432','087888890005','0818944567','08777753221','085780779215']){
   for(const value of [number,'62'+number.slice(1),'+62 '+number.slice(1),number.slice(0,4)+'-'+number.slice(4)]){
    const g=gate(undefined,true);assert.equal(g.window.ToolkitAccess.isPhoneAllowed(value),true,value);assert.equal(g.window.ToolkitAccess.grant(false,value),true,value);assert.equal(g.stored.version,2);assert.equal(JSON.stringify(g.stored).includes(number),false);
   }
  }
- for(const value of ['',null,123,'081234567890','081334544433','0813345444320','08133454443','+63081334544432','081334544432abc']){
+ for(const value of ['',null,123,'081234567890','085780779214','081334544433','0813345444320','08133454443','+63081334544432','081334544432abc']){
   const g=gate(undefined,true);assert.equal(g.window.ToolkitAccess.isPhoneAllowed(value),false);assert.equal(g.window.ToolkitAccess.grant(false,value),false);assert.equal(g.stored,null);
  }
  assert.ok(gate({version:1,accessConsent:true,expiresAt:Date.now()+3600000}).redirect,'old unrestricted sessions must sign in again');
