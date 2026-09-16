@@ -10,7 +10,7 @@ Jalankan dari folder proyek:
 python3 -m http.server 4173 --bind 127.0.0.1 --directory web
 ```
 
-Buka http://127.0.0.1:4173. URL lokal tersedia selama server berjalan di Mac ini. File `web/index.html` juga bisa dibuka langsung.
+Buka http://127.0.0.1:4173. URL lokal tersedia selama server berjalan di Mac ini. Gunakan server HTTP agar penanda sesi formulir bekerja konsisten.
 
 ### Buka dari HP / tablet
 
@@ -65,11 +65,11 @@ Palet hitam–putih, merah, dan cyan mengacu pada [situs resmi TikTok Shop](http
 
 ## Alur workspace
 
-- **Rencana jualan:** Harga & keuntungan → Simulasi diskon → Cek biaya iklan.
+- **Rencana jualan:** Harga & proteksi → Simulasi diskon → Cek biaya iklan.
 - **Operasional toko:** Rencana stok; Retur & pesan pembeli.
-- **Panduan & unduhan:** Template & hasil; Belajar di TokioTalk; Kenali proteksi; Cara hitung & sumber.
+- **Panduan & unduhan:** Template & hasil; Belajar di TokioTalk; Kenali proteksi; Biaya & referensi; Cara hitung & sumber.
 
-Promo otomatis memakai biaya produk. Halaman iklan dapat menyalin margin produk sebelum biaya iklan lewat tombol eksplisit; perubahan produk berikutnya ditandai agar diperbarui. Stok dan retur memiliki input terpisah. Status simpan berlaku untuk seluruh alat, CSV berisi hasil saat ini, sedangkan Excel merupakan template awal.
+Promo otomatis memakai biaya produk. Halaman iklan dapat dihubungkan ke margin produk setelah premi dan operasional, sebelum iklan. Perubahan produk langsung diperhitungkan; edit margin iklan secara manual memutus hubungan. Stok dan retur memiliki input terpisah. Status simpan berlaku untuk seluruh alat, CSV berisi hasil saat ini, sedangkan Excel merupakan template awal.
 
 Rancangan dan hubungan data dijelaskan di [catatan UX](docs/design/workspace-ux.md). [Hasil pemeriksaan](docs/design/workspace-ux-verification.md) mencakup alur antaralat, penyimpanan, navigasi, unduhan, dan layar kecil.
 
@@ -87,7 +87,7 @@ Rancangan dan hubungan data dijelaskan di [catatan UX](docs/design/workspace-ux.
 - [Riset Toolkit TikTok Shop](docs/research/riset-toolkit-tiktok-shop.md): arah fee engine berdasarkan tanggal efektif serta integrasi premi.
 - [Branch · Isi Template Excel](docs/research/branch-isi-template-excel.md): pembahasan website dan template.
 
-Arsip merupakan konteks, bukan verifikasi tarif terkini. Fee master, rekonsiliasi settlement, dan integrasi premi pada riset belum diimplementasikan dalam impor ini. Website masih prototype lokal dengan biaya contoh yang bisa diedit, belum tersambung ke TikTok Shop, Mekari, atau sistem polis.
+Arsip merupakan konteks, bukan verifikasi tarif terkini. Premi simulasi, profil biaya contoh, dan estimasi settlement sudah tersedia. Fee engine berdasarkan tanggal efektif serta rekonsiliasi transaksi aktual belum tersedia. Website masih prototype lokal dengan biaya contoh yang bisa diedit, belum tersambung ke TikTok Shop, Mekari, atau sistem polis.
 
 ## Verifikasi impor
 
@@ -97,3 +97,20 @@ Arsip merupakan konteks, bukan verifikasi tarif terkini. Fee master, rekonsilias
 - Excel tertanam lolos pemeriksaan integritas ZIP dan berisi 8 sheet.
 
 Ini pemeriksaan impor dan interaksi dasar, bukan audit seluruh rumus atau kebijakan marketplace.
+
+## Pembaruan proteksi — 16 September 2026
+
+Fitur diadaptasi dari `TMI_Seller_Toolkit_ID_EN 1.html` milik pengguna:
+
+- Premi seller ON/OFF **0,3% dari harga setelah diskon**, terpisah dari HPP; perbandingan margin dan rekomendasi harga yang menghitung ulang premi.
+- Biaya platform per pesanan dibagi jumlah item; operasional per item atau alokasi biaya bulanan (dibulatkan ke atas Rp0,01).
+- Premi masuk setiap skenario diskon serta margin ROAS yang terhubung. Rekomendasi harga dibulatkan ke atas Rp1.
+- **Contoh proteksi** menerapkan profil sumber secara eksplisit. Biaya tetap dapat diedit; angka tersimpan lama memakai proteksi OFF, item/order 1 dan operasional 0.
+- Workbook asli **9 sheet** (termasuk Operasional), terpisah dari input sesi. CSV mengekspor hitungan saat ini.
+- Form akses ID/EN wajib sesuai pilihan pengguna: nama, WhatsApp Indonesia, email, dan persetujuan akses. Nama toko, keterangan, dan pemasaran opsional.
+
+Form ini gerbang UX lokal, **bukan autentikasi server**. Nilai pribadi tidak dikirim atau disimpan aplikasi; hanya penanda sesi non-PII selama 12 jam di tab browser. Kalkulasi tersimpan tetap terpisah di localStorage. Tombol Keluar menghapus penanda akses, bukan hitungan tersimpan. Belum ada pendaftaran, CRM, atau pencatatan persetujuan ke TMI.
+
+Tarif premi 0,3% adalah asumsi simulasi dari lampiran; menyalakannya tidak membeli atau mengaktifkan polis. Profil template memakai platform 8,75%, affiliate 5%, biaya/order Rp1.250 dan target 20%; bukan tarif universal atau penawaran resmi.
+
+Verifikasi: `node --test tests/*.test.cjs` (10 tes), pemeriksaan syntax seluruh JS, alur browser form/proteksi/promo/ROAS/simpan/unduh, serta pemeriksaan overflow 11 halaman × 4 lebar × 2 bahasa. [Catatan integrasi](docs/design/protection-integration.md).

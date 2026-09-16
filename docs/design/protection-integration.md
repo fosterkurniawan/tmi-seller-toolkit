@@ -12,6 +12,25 @@ Sumber: `TMI_Seller_Toolkit_ID_EN 1.html` dari Downloads pengguna. Workspace ter
 - Tambahkan halaman biaya/referensi, panduan proteksi, CSV lengkap, dan workbook asli terbaru (9 sheet) sebagai template terpisah dari nilai sesi website.
 - Pengguna memilih opsi 2: form wajib sebelum masuk. Form lokal meminta nama, WhatsApp Indonesia, email, persetujuan akses; nama toko/keterangan dan marketing opsional. Tidak ada PII yang dikirim atau disimpan. Hanya penanda sesi non-PII 12 jam. Ini gerbang UX lokal, bukan autentikasi server atau pencatatan consent produksi.
 
-## Verifikasi yang direncanakan
+## Verifikasi selesai
 
 Tes rumus untuk premi, target harga minimum, pembagian biaya, promo, input tidak valid, dan kompatibilitas state lama; tes browser untuk form akses, bahasa, alur proteksi/promo/ROAS, unduhan, dan layar HP. Perubahan UI disiapkan dalam staging lokal sebelum mengganti website publik.
+
+
+- 10 tes Node lulus: premi ON/OFF, biaya pesanan/overhead/iklan sekali, promo, batas input, harga minimum target, penanda akses, migrasi data lama, dan penyimpanan simulasi rugi.
+- Syntax semua JS eksternal serta script inline lulus.
+- Browser staging: akses langsung dialihkan ke form; field wajib/nomor/email invalid ditolak; marketing tidak diperlukan; keluar menghapus akses; akses langsung berikutnya meminta form lagi.
+- Profil sumber menghasilkan premi Rp300 dan keuntungan Rp29.700; OFF menghasilkan Rp30.000. Harga target Rp85.292 menghasilkan premi Rp255,876 dan margin minimal 20%.
+- Item/order 5 dan overhead Rp1.500.000 / 300 = Rp5.000 menghasilkan laba Rp25.700. ROAS terhubung memakai margin 25,7%; input manual memutus hubungan.
+- Simpan/reload mempertahankan input baru. Skenario rugi boleh disimpan meskipun ROAS impas tidak tersedia untuk margin negatif.
+- CSV berhasil diunduh dengan premi, overhead, alokasi biaya dan hasil. Workbook hasil klik browser identik dengan workbook sumber; ZIP utuh dan 9 sheet.
+- SHA-256 workbook: `ab8f15e8afb240400d44fdb58e76237a654e4a151ead1c5657a22e380e9a1639`.
+- 88 kombinasi halaman/lebar/bahasa tidak overflow horizontal: 11 halaman × 320/768/1024/1440 × ID/EN. Form diperiksa pada 320px ID dan EN. Ini emulasi viewport browser, bukan pengujian perangkat fisik.
+- Script/CSS memakai versi hash konten agar pembaruan tidak tertahan cache lama.
+
+Tidak mengubah ketentuan polis, tidak menghubungkan marketplace/CRM, dan tidak mengaktifkan pengiriman data pribadi. Workbook sumber dipertahankan tanpa perubahan rumus.
+
+
+## Rilis publik
+
+Dipasang ke folder `web/` yang dilayani origin 4174 tanpa mengganti tunnel. HTTP publik untuk index, form, engine, UI, dan terjemahan mengembalikan 200 dengan byte identik dengan file proyek. Browser publik berhasil masuk melalui form, menjalankan contoh Rp300/Rp29.700/harga target Rp85.292, menampilkan premi promo 0–25%, mengganti ID/EN, lalu keluar. Tidak ada warning/error console selama pemeriksaan alur publik. Viewport pengujian dikembalikan ke ukuran normal.

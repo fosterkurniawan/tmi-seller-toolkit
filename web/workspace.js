@@ -1,7 +1,7 @@
 // Navigation and guidance for the existing calculators. Amounts stay in the original engine.
 let savedSnapshot = null;
 let hasSaved = false;
-let roasSnapshot = null;
+
 const exploredTools = new Set();
 let menuTrigger = null;
 let menuScroll = 0;
@@ -13,13 +13,15 @@ try {
 const pageGroups = {
   home: 'Ruang kerja', margin: 'Rencana jualan', promo: 'Rencana jualan', roas: 'Rencana jualan',
   stock: 'Operasional toko', returns: 'Operasional toko', templates: 'Panduan & unduhan',
-  webinar: 'Panduan & unduhan', protection: 'Panduan & unduhan', sources: 'Panduan & unduhan'
+  webinar: 'Panduan & unduhan', protection: 'Panduan & unduhan', sources: 'Panduan & unduhan', master: 'Panduan & unduhan'
 };
 const fieldHelp = {
   price: 'Harga satu item sebelum potongan dari seller.',
   discount: 'Diskon yang kamu tanggung, bukan subsidi platform.',
   cogs: 'Biaya membeli atau membuat satu produk.',
-  fixed: 'Biaya per order ÷ jumlah item dalam order. Contoh: Rp1.250 ÷ 5 = Rp250 per item.',
+  fixed: 'Biaya per pesanan dibagi jumlah item. Jangan isi biaya per item di sini.',
+  orderQty: 'Jumlah item dalam satu pesanan untuk membagi biaya platform.',
+  operations: 'Overhead per item. Jangan hitung ulang HPP, fee, premi, kemasan, ongkir, atau iklan.',
   admin: 'Tarif efektif sesuai tokomu. Angka awal hanya contoh.',
   affiliate: 'Isi 0 jika penjualan tidak memakai affiliate.',
   ads: 'Total biaya iklan ÷ item terkait iklan. Ini estimasi alokasi per produk.',
@@ -40,8 +42,8 @@ function fieldMarkup(page, [key, label, unit]) {
     <label class="field-name" for="${page}-${key}">${label}</label>
     <span class="input-wrap ${unit !== 'Rp' ? 'suffix' : ''}">
     ${unit === 'Rp' ? '<b aria-hidden="true">Rp</b>' : ''}
-    <input id="${page}-${key}" data-group="${page}" data-key="${key}" type="number" inputmode="${unit === '%' || key === 'daily' ? 'decimal' : 'numeric'}" min="0"
-      max="${unit === '%' ? 100 : 1000000000000}" step="${unit === '%' || key === 'daily' ? 'any' : 1}"
+    <input id="${page}-${key}" data-group="${page}" data-key="${key}" type="number" inputmode="${unit === '%' || ['daily','operations'].includes(key) ? 'decimal' : 'numeric'}" min="${key === 'orderQty' ? 1 : 0}"
+      max="${unit === '%' ? 100 : 1000000000000}" step="${unit === '%' || ['daily','operations'].includes(key) ? 'any' : 1}"
       value="${state[page][key]}" required aria-label="${label}" ${help ? `aria-describedby="help-${page}-${key}"` : ''}>
     ${unit !== 'Rp' ? `<b aria-hidden="true">${unit}</b>` : ''}</span>
     ${help ? `<details class="field-hint"><summary aria-label="Info ${label}">?</summary><small id="help-${page}-${key}">${help}</small></details>` : ''}</div>`;
@@ -50,8 +52,8 @@ function fieldMarkup(page, [key, label, unit]) {
 function renderFields() {
   const groups = [
     ['Harga produk', ['price', 'discount']],
-    ['Modal & operasional', ['cogs', 'pack', 'ship', 'other']],
-    ['Biaya penjualan', ['fixed', 'admin', 'affiliate', 'service', 'ads']],
+    ['Modal & operasional', ['cogs', 'pack', 'ship', 'operations', 'other']],
+    ['Biaya penjualan', ['fixed', 'orderQty', 'admin', 'affiliate', 'service', 'ads']],
     ['Target keuntungan', ['target']]
   ];
   $('#margin-form').innerHTML = groups.map(([title, keys], index) =>
@@ -85,11 +87,11 @@ function refreshWorkspace() {
     ? `Margin produk sebelum iklan: ${number(ratio, 2)}%`
     : 'Margin produk harus positif. Periksa harga & biaya.';
   $('#use-product-margin').disabled = !canUse;
-  const stale = roasSnapshot && roasSnapshot !== JSON.stringify(state.margin);
-  $('#roas-source-status').textContent = roasSnapshot
-    ? stale ? 'Biaya berubah. Salin ulang margin produk.' : 'Margin disalin. Perubahan produk tidak otomatis diterapkan.'
-    : 'Isi manual atau salin dari produk.';
-  $('#roas-source-status').classList.toggle('stale', Boolean(stale));
+  $('#roas-source-status').textContent = state.roasLinked
+    ? 'Terhubung otomatis: setelah premi & operasional, sebelum iklan.'
+    : 'Input manual. Masukkan margin setelah premi dan operasional.';
+  $('#roas-source-status').classList.remove('stale');
+  $('#use-product-margin').textContent = state.roasLinked ? 'Margin produk terhubung' : 'Hubungkan margin produk';
   renderMobileCards();
   localizeUI();
 }
@@ -197,10 +199,10 @@ $('#use-product-margin').addEventListener('click', () => {
   const m = marginCalc(state.margin);
   if (m.error || m.before <= 0) return;
   state.roas.margin = m.before / m.net * 100;
-  roasSnapshot = JSON.stringify(state.margin);
+  state.roasLinked = true;
   $('#roas-margin').value = state.roas.margin;
   recalc();
-  toast('Margin sebelum iklan disalin. Lengkapi pendapatan dan biaya untuk periode iklanmu.');
+  toast('Margin otomatis mengikuti biaya produk, proteksi, dan operasional.');
 });
 $('#close-menu').addEventListener('click', () => setMenu(false, true));
 document.addEventListener('keydown', e => {
@@ -216,7 +218,7 @@ document.addEventListener('keydown', e => {
 });
 // Section anchors within the returns page are not application routes.
 document.addEventListener('click', e => {
-  const link = e.target.closest('.local-links a, #margin-peek a, .skip-link');
+  const link = e.target.closest('.local-links a, #margin-peek a, .skip-link, .protection-jump');
   if (!link) return;
   e.preventDefault();
   const target = $(link.getAttribute('href'));
@@ -231,6 +233,7 @@ window.matchMedia('(min-width: 881px)').addEventListener('change', e => {
 window.addEventListener('hashchange', () => {
   if (LABELS[location.hash.slice(1)]) navigate(location.hash.slice(1), false);
 });
+initializeProtection();
 addJourney();
 initializeMobile();
 renderFields();
@@ -250,7 +253,7 @@ function initializeMobile() {
     <button data-page="home" data-section="home">${icon('grid')}<span>Beranda</span></button>
     <button data-page="margin" data-section="margin promo roas">${icon('calc')}<span>Jualan</span></button>
     <button data-page="stock" data-section="stock returns">${icon('box')}<span>Toko</span></button>
-    <button id="dock-menu" aria-controls="sidebar" aria-expanded="false" data-section="templates webinar protection sources">${icon('menu')}<span>Menu</span></button>`;
+    <button id="dock-menu" aria-controls="sidebar" aria-expanded="false" data-section="templates webinar protection sources master">${icon('menu')}<span>Menu</span></button>`;
   document.body.append(dock);
   $('#dock-menu').addEventListener('click', () => setMenu(true));
   for (const page of ['stock', 'returns']) {
@@ -274,7 +277,7 @@ function initializeMobile() {
 }
 
 function renderMobileCards() {
-  const promoLabels = ['Harga setelah diskon', 'Keuntungan / item', 'Margin', 'Keuntungan total'];
+  const promoLabels = ['Harga setelah diskon', 'Premi seller', 'Keuntungan / item', 'Margin', 'Keuntungan total'];
   const returnLabels = ['Ongkir kirim', 'Ongkir retur', 'Biaya lain', 'Biaya diganti', 'Sisa biaya'];
   // Cells already contain escaped user text; copying also preserves data-no-i18n on order IDs.
   for (const kind of ['promo', 'return']) {
@@ -284,7 +287,7 @@ function renderMobileCards() {
       const promo = kind === 'promo';
       const labels = promo ? promoLabels : returnLabels;
       return `<article class="mobile-result-card ${row.className}" role="listitem">
-        <header><h3>${promo ? '<span>Diskon</span> ' : ''}${cells[0].innerHTML}</h3>${cells[promo ? 5 : 6].innerHTML}</header>
+        <header><h3>${promo ? '<span>Diskon</span> ' : ''}${cells[0].innerHTML}</h3>${cells[6].innerHTML}</header>
         <dl>${labels.map((label, index) => `<div><dt>${label}</dt><dd>${cells[index+1].innerHTML}</dd></div>`).join('')}</dl>
         ${promo ? '' : `<footer>${cells[7].innerHTML}</footer>`}
       </article>`;
