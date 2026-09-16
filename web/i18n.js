@@ -1,5 +1,8 @@
 /* Local, explicit translations. IDs and stored calculator data never change language. */
 const EN = {
+  "Masukkan nama toko.":"Enter your store name.",
+  "Lengkapi data diri dan tokomu, lalu mulai eksplorasi.":"Add your details and store name, then start exploring.",
+  "Keterangan & preferensi":"Notes & preferences",
   "Jualan lebih siap.":"Sell with a plan.",
   "Untung lebih jelas.":"Know your profit.",
   "Harga, promo, dan proteksi. Satu ruang kerja.":"Pricing, promos, and protection. One workspace.",

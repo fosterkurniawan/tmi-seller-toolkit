@@ -18,3 +18,7 @@ Permintaan: modernisasi halaman awal dengan warna TikTok, visual 3D, dan perjala
 - Browser: submit kosong, nomor invalid, alur Enter, disclosure opsional, bahasa, dan submit valid sampai workspace tanpa persetujuan pemasaran.
 - 320/390/768/1024/1440 px × ID/EN: tidak ada overflow horizontal dan gambar terunduh. Screenshot desktop serta HP diperiksa; bukan tes perangkat fisik.
 - Tidak ada warning/error console pada sesi pengujian.
+
+## Nama toko wajib
+
+Nama toko dipindahkan dari disclosure opsional ke kolom utama setelah email, ditandai wajib, dan divalidasi setelah trim. Nilai kosong atau hanya spasi menahan submit serta memfokuskan kolom toko. Enter dari email menuju nama toko, lalu persetujuan. Browser publik: kosong/spasi ditolak, pesan ID/EN tampil, nama toko valid membuka workspace. Keterangan dan marketing tetap opsional.

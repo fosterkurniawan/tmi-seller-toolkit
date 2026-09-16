@@ -107,7 +107,7 @@ Fitur diadaptasi dari `TMI_Seller_Toolkit_ID_EN 1.html` milik pengguna:
 - Premi masuk setiap skenario diskon serta margin ROAS yang terhubung. Rekomendasi harga dibulatkan ke atas Rp1.
 - **Contoh proteksi** menerapkan profil sumber secara eksplisit. Biaya tetap dapat diedit; angka tersimpan lama memakai proteksi OFF, item/order 1 dan operasional 0.
 - Workbook asli **9 sheet** (termasuk Operasional), terpisah dari input sesi. CSV mengekspor hitungan saat ini.
-- Form akses ID/EN wajib sesuai pilihan pengguna: nama, WhatsApp Indonesia, email, dan persetujuan akses. Nama toko, keterangan, dan pemasaran opsional.
+- Form akses ID/EN wajib sesuai pilihan pengguna: nama, WhatsApp Indonesia, email, nama toko, dan persetujuan akses. Keterangan dan pemasaran opsional.
 
 Form ini gerbang UX lokal, **bukan autentikasi server**. Nilai pribadi tidak dikirim atau disimpan aplikasi; hanya penanda sesi non-PII selama 12 jam di tab browser. Kalkulasi tersimpan tetap terpisah di localStorage. Tombol Keluar menghapus penanda akses, bukan hitungan tersimpan. Belum ada pendaftaran, CRM, atau pencatatan persetujuan ke TMI.
 
