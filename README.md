@@ -114,3 +114,10 @@ Form ini gerbang UX lokal, **bukan autentikasi server**. Nilai pribadi tidak dik
 Tarif premi 0,3% adalah asumsi simulasi dari lampiran; menyalakannya tidak membeli atau mengaktifkan polis. Profil template memakai platform 8,75%, affiliate 5%, biaya/order Rp1.250 dan target 20%; bukan tarif universal atau penawaran resmi.
 
 Verifikasi: `node --test tests/*.test.cjs` (10 tes), pemeriksaan syntax seluruh JS, alur browser form/proteksi/promo/ROAS/simpan/unduh, serta pemeriksaan overflow 11 halaman × 4 lebar × 2 bahasa. [Catatan integrasi](docs/design/protection-integration.md).
+
+
+### Pembatasan nomor sementara
+
+Form awal sekarang hanya menerima empat nomor yang ditentukan pengguna. Format `08…`, `62…`, dan `+62…` dinormalisasi; nomor lain menahan submit. Versi penanda sesi dinaikkan sehingga penanda lama tidak diterima setelah halaman memuat versi baru. Nomor yang diinput tidak ditambahkan ke penanda sesi atau dikirim ke server.
+
+Pembatasan ini adalah filter form pada prototype statis, **bukan otorisasi server atau verifikasi kepemilikan nomor**. Daftar dan logika berada pada JavaScript klien, sehingga tidak boleh diperlakukan sebagai batas keamanan. Pengamanan akses sebenarnya memerlukan backend dan verifikasi seperti OTP.

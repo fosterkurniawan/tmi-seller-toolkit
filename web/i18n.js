@@ -1,5 +1,6 @@
 /* Local, explicit translations. IDs and stored calculator data never change language. */
 const EN = {
+  "Nomor ini belum memiliki akses ke toolkit.":"This phone number does not have access to the toolkit.",
   "Masukkan nama toko.":"Enter your store name.",
   "Lengkapi data diri dan tokomu, lalu mulai eksplorasi.":"Add your details and store name, then start exploring.",
   "Keterangan & preferensi":"Notes & preferences",
