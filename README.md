@@ -8,6 +8,22 @@ Panduan pembaruan: [Sites hosting](docs/design/sites-hosting.md).
 
 Website **TMI Seller Toolkit — Ruang Kerja Seller**, diimpor dari HTML pengguna pada 15 September 2026.
 
+## Kolaborasi lewat GitHub
+
+Repositori: [fosterkurniawan/tmi-seller-toolkit](https://github.com/fosterkurniawan/tmi-seller-toolkit).
+
+Untuk menjalankan project setelah mendapat akses:
+
+```sh
+git clone https://github.com/fosterkurniawan/tmi-seller-toolkit.git
+cd tmi-seller-toolkit
+python3 -m http.server 4173 --bind 127.0.0.1 --directory web
+```
+
+Buka `http://127.0.0.1:4173`. Tes perhitungan, bahasa, akses, dan tema dapat dijalankan dengan `node --test tests/*.test.cjs`.
+
+Perubahan kode di GitHub belum otomatis memperbarui website Sites; publikasi website mengikuti [panduan hosting](docs/design/sites-hosting.md). Folder `.runtime/`, berkas `.env`, dan credential lokal tidak termasuk repositori.
+
 ## Buka website
 
 Jalankan dari folder proyek:
