@@ -121,3 +121,10 @@ Verifikasi: `node --test tests/*.test.cjs` (10 tes), pemeriksaan syntax seluruh 
 Form awal sekarang hanya menerima lima nomor yang ditentukan pengguna. Format `08…`, `62…`, dan `+62…` dinormalisasi; nomor lain menahan submit. Versi penanda sesi dinaikkan sehingga penanda lama tidak diterima setelah halaman memuat versi baru. Nomor yang diinput tidak ditambahkan ke penanda sesi atau dikirim ke server.
 
 Pembatasan ini adalah filter form pada prototype statis, **bukan otorisasi server atau verifikasi kepemilikan nomor**. Daftar dan logika berada pada JavaScript klien, sehingga tidak boleh diperlakukan sebagai batas keamanan. Pengamanan akses sebenarnya memerlukan backend dan verifikasi seperti OTP.
+
+
+### Mode terang / gelap
+
+Tombol matahari/bulan di sebelah pilihan bahasa mengubah tema halaman masuk dan seluruh workspace. Pengaturan pertama mengikuti preferensi perangkat; setelah dipilih, preferensi disimpan terpisah dengan key `tmi-seller-theme`. Tema tetap bekerja bila penyimpanan browser diblokir (hanya untuk halaman yang sedang terbuka). Preferensi disinkronkan antar-tab pada alamat yang sama. Pergantian tema tidak mereset isian, data kalkulasi, bahasa, atau akses.
+
+`theme-mode.js` menerapkan tema sebelum render; `color-modes.css` mengatur kontras, permukaan, input, tabel, pesan, dialog, dan navigasi. Override gelap hanya berlaku pada layar, bukan cetak. Kontrol mendukung ID/EN/ZH dan keyboard.

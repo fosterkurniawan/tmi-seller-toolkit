@@ -1,0 +1,82 @@
+/* Shared appearance controls; dark overrides are screen-only so printing stays legible. */
+:root{color-scheme:light}
+.appearance-controls{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.theme-toggle{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:44px;min-height:44px;padding:8px 12px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);font:inherit;font-size:12px;font-weight:600;line-height:1.4;cursor:pointer;flex-shrink:0}
+.theme-toggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.theme-toggle .theme-moon{display:none}.theme-toggle:hover{border-color:var(--green)}
+@media(max-width:1100px){.theme-name{display:none}.theme-toggle{padding:10px}}
+@media(max-width:600px){.topbar .appearance-controls{grid-column:2;grid-row:1}.topbar .breadcrumbs b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}.topbar .breadcrumbs{overflow:hidden}.topbar .mobile-menu{flex-shrink:0}.appearance-controls .language-picker{min-height:44px}.appearance-controls select{min-height:42px}}
+@media(max-width:400px){.access-header .brand-symbol{display:none}.access-header .access-brand{font-size:14px}.access-header .brand-byline{font-size:6px;letter-spacing:.7px}.access-header .appearance-controls{gap:6px}}
+/* A light landing page matching the workspace palette. */
+html[data-theme=light] body:has(.access-shell){background:var(--bg)}
+html[data-theme=light] :is(.access-brand,.access-hero){color:var(--ink)}
+html[data-theme=light] .access-header .language-picker{background:white;color:var(--ink);border-color:var(--line)}
+html[data-theme=light] :is(.brand-byline,.hero-eyebrow,.hero-copy p,.hero-journey,.access-footer){color:var(--sub)}
+html[data-theme=light] :is(.hero-accent,.hero-journey b){color:var(--green)}
+html[data-theme=light] .hero-journey,html[data-theme=light] .visual-orbit{border-color:var(--line)}
+html[data-theme=light] .visual-chip{background:white;color:var(--ink);border-color:var(--line);box-shadow:0 8px 24px #1618230b}
+html[data-theme=light] .access-card{border:1px solid var(--line);box-shadow:0 16px 40px #16182308}
+html[data-theme=light] .brand-symbol{color:white}
+@media screen{
+html[data-theme=dark]{color-scheme:dark;--ink:#f1f2f7;--sub:#bec0ce;--muted:#a8abba;--green:#65e3dc;--bg:#101014;--line:#383942;--mint:#163e3b;--cyan:#173a3b;--pink:#412332;--yellow:#3b321e;--shop-soft:#30212a;--shadow:0 10px 28px #0002;--surface:#1c1d24;--raised:#272932}
+html[data-theme=dark] body{background:var(--bg);color:var(--ink)}
+html[data-theme=dark] ::selection{color:#101014;background:#65e3dc}
+html[data-theme=dark] :is(button,a,input,select,textarea,summary):focus-visible{outline-color:#65e3dc}
+html[data-theme=dark] :is(.panel,.model-details,.stat-card,.tool-card,.journey-card,.live-summary,.quest-counter,.sheet-item,.source-card,.protection-card,dialog,.dialog-head,.mobile-result-card,.access-card,.sidebar,.skip-link){background:var(--surface);color:var(--ink);border-color:var(--line)}
+html[data-theme=dark] :is(.language-picker,.theme-toggle){background:var(--raised);border-color:var(--line);color:var(--ink)}
+html[data-theme=dark] :is(.theme-toggle .theme-sun){display:none}html[data-theme=dark] .theme-toggle .theme-moon{display:block}
+html[data-theme=dark] .theme-toggle{border-color:#477774}
+html[data-theme=dark] :is(.language-picker option,select option){background:var(--surface);color:var(--ink)}
+html[data-theme=dark] .topbar{background:var(--bg)}
+html[data-theme=dark] :is(.nav-btn:hover,.journey-nav,.operation-nav,.copybox,.step-number,.tabrow button,.nav-close,.close-btn,.optional-badge){background:var(--raised);color:var(--sub);border-color:var(--line)}
+html[data-theme=dark] :is(.nav-btn.active,.journey-step.active,.operation-step.active,.tabrow button.active){background:#32353f;color:var(--ink)}
+html[data-theme=dark] :is(.journey-step,.field,.protection-card .limit,.consent,.local-notice,.local-notice b){color:var(--sub)}
+html[data-theme=dark] :is(.btn.ghost,.btn.subtle){background:transparent;color:var(--ink);border-color:var(--line);box-shadow:0 2px 0 #0004}
+html[data-theme=dark] .btn.mint{color:#101014}
+html[data-theme=dark] :is(.badge.gray,.tag){background:#343641;color:#d4d6e0}
+html[data-theme=dark] :is(.badge.mint,.live-summary>span.summary-orb,.input-section legend>span,.journey-card.explored .step-number,.field-hint[open] summary,.field-hint summary:hover){background:var(--cyan);color:var(--green);border-color:#315b59}
+html[data-theme=dark] :is(.eyebrow,.form-eyebrow){color:#ff91b1}
+html[data-theme=dark] .start-panel{background:#30212a;border-color:#523441;color:var(--ink)}
+html[data-theme=dark] .start-panel:after{background:#163335}
+html[data-theme=dark] :is(.start-panel p,.start-panel small){color:#d6c2ca}
+html[data-theme=dark] .start-panel .badge{background:#462837;color:#ffb2ca;border-color:#634051}
+html[data-theme=dark] .hero-art:before{background:#204847;border-color:#345a58}
+html[data-theme=dark] :is(.journey-card,.tool-card.compact){box-shadow:0 4px 0 #0004}
+html[data-theme=dark] .journey-card:hover{border-color:#65a49f;box-shadow:0 5px 0 #163b3a}
+html[data-theme=dark] .quest-counter progress,html[data-theme=dark] .quest-counter progress::-webkit-progress-bar{background:#3a3d47}
+html[data-theme=dark] .quest-counter progress::-webkit-progress-value{background:#53cbc5}
+html[data-theme=dark] .quest-counter progress::-moz-progress-bar{background:#53cbc5}
+html[data-theme=dark] :is(.connection-panel,.intro-tip){background:#192f32;border-color:#315256;color:#c6e5e5}
+html[data-theme=dark] .connection-label{color:var(--green)}
+html[data-theme=dark] :is(.source-status,.result-breakdown,.result-row.strong){border-color:#37514f}
+html[data-theme=dark] :is(.input-wrap,.field select,.field textarea,.access-fields input,.access-fields textarea){background:#14151b;border-color:#424550;color:var(--ink)}
+html[data-theme=dark] :is(.input-wrap b,.field-hint summary){color:var(--sub)}
+html[data-theme=dark] .input-wrap:focus-within{border-color:var(--green);box-shadow:0 0 0 2px #234e4b}
+html[data-theme=dark] :is(.access-fields input:focus,.access-fields textarea:focus){background:#14151b;border-color:var(--green)}
+html[data-theme=dark] .access-fields input::placeholder,html[data-theme=dark] .access-fields textarea::placeholder{color:#a1a4b4}
+html[data-theme=dark] .field-hint small{background:#283a3c;color:#d0e2e2}
+html[data-theme=dark] :is(.result-panel,.margin-peek){background:#183330;border-color:#345c56;color:var(--ink)}
+html[data-theme=dark] :is(.result-label,.result-caption,.result-row){color:#bddbd6}
+html[data-theme=dark] :is(.status-tag,.tag.good){background:#224e40;color:#9de5bd}
+html[data-theme=dark] :is(.status-tag.negative,.badge.pink){background:#4d2638;color:#ffb3c9}
+html[data-theme=dark] :is(.tag.warn,.notice){background:#40361f;color:#f1d593}
+html[data-theme=dark] .data-table th{background:#292b34;color:#c3c5d3}
+html[data-theme=dark] :is(.data-table tr.good,.mobile-result-card.good){background:#19382f;border-color:#346351}
+html[data-theme=dark] :is(.data-table tr.bad,.mobile-result-card.bad){background:#38232e;border-color:#694052}
+html[data-theme=dark] .error{background:#3d2330;border-color:#784159;color:#ffb2c9}
+html[data-theme=dark] :is(.field-error,#access-error,.required){color:#ff9abb}
+html[data-theme=dark] .access-fields input[aria-invalid=true]{background:#311d27;border-color:#ff85ab}
+html[data-theme=dark] .consent input[aria-invalid=true]{outline-color:#ff85ab}
+html[data-theme=dark] :is(.protection-input,.premium-total){border-color:#573b47}
+html[data-theme=dark] :is(.compare-grid .selected,.protection-entry){border-color:#365d59}
+html[data-theme=dark] :is(.tool-icon.cyan,.tool-icon.mint){background:#244544;color:#9dece7}
+html[data-theme=dark] .tool-icon.pink{background:#472b39;color:#ffb3cb}
+html[data-theme=dark] .tool-icon.yellow{background:#383929;color:#e2dfa8}
+html[data-theme=dark] .mobile-dock{background:#1c1d24f5;border-color:var(--line)}
+html[data-theme=dark] .mobile-dock button.active{background:var(--cyan);color:var(--ink)}
+html[data-theme=dark] .toast{background:#e7e9f2;color:#181921}
+html[data-theme=dark] #save-status.unsaved{color:#f0cf89}
+html[data-theme=dark] .resource-strip{border-color:var(--line)}
+html[data-theme=dark] .access-card{box-shadow:0 16px 40px #0003}
+}
+@media print{.appearance-controls{display:none!important}}

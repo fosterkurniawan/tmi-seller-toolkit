@@ -1,5 +1,10 @@
 /* Simplified Mandarin UI copy. Monetary amounts remain Indonesian rupiah. */
 const ZH = {
+"Mode gelap":"深色模式",
+"Ubah tema":"切换主题",
+"Terang":"浅色",
+"Gelap":"深色",
+
   "Nomor ini belum memiliki akses ke toolkit.":"此电话号码尚无工具箱访问权限。",
   "TOKIOTALK HYBRID WEBINAR":"TOKIOTALK 线上线下研讨会",
   "LEARN TOGETHER. SELL SMARTER.":"一起学习，让销售更有方法。",
