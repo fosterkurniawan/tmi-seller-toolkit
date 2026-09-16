@@ -749,23 +749,24 @@ const EN = {
 
 const LANGUAGE_KEY = 'tmi-seller-language';
 let activeLanguage = 'id';
-try { if (localStorage.getItem(LANGUAGE_KEY) === 'en') activeLanguage = 'en'; } catch (_) { /* Optional storage. */ }
-function uiLocale() { return activeLanguage === 'en' ? 'en-US' : 'id-ID'; }
+try { const savedLanguage=localStorage.getItem(LANGUAGE_KEY); if (['id','en','zh'].includes(savedLanguage)) activeLanguage=savedLanguage; } catch (_) { /* Optional storage. */ }
+function uiLocale() { return {id:'id-ID',en:'en-US',zh:'zh-CN'}[activeLanguage]; }
 function translate(text) {
-  if (activeLanguage !== 'en' || typeof text !== 'string') return text;
+  if (activeLanguage === 'id' || typeof text !== 'string') return text;
   const value = text.trim();
-  let translated = EN[value];
+  let translated = (activeLanguage === 'zh' ? ZH : EN)[value];
+  const wording = (english, chinese) => activeLanguage === 'zh' ? chinese : english;
   if (translated === undefined) {
     const patterns = [
-      [/^(\d)\/3 alat dijelajahi$/, (_, n) => `${n}/3 tools explored`],
-      [/^Langkah (\d+)$/, (_, n) => `Step ${n}`],
-      [/^Info (.+)$/, (_, label) => `About ${translate(label)}`],
-      [/^Hapus (.+)$/, (_, id) => `Remove ${id}`],
-      [/^(.+%) dari nilai barang setelah diskon$/, (_, n) => `${n} of discounted product value`],
-      [/^Margin produk sebelum iklan: (.+)$/, (_, n) => `Product margin before ads: ${n}`],
-      [/^Harga (.+) · HPP (.+) · target (.+)$/, (_, price, cost, target) => `Price ${price} · COGS ${cost} · target ${target}`],
-      [/^([\d.,]+) hari$/, (_, n) => `${n} days`],
-      [/^([\d.,]+) unit$/, (_, n) => `${n} units`]
+      [/^(\d)\/3 alat dijelajahi$/, (_, n) => wording(`${n}/3 tools explored`, `已探索${n}/3个工具`)],
+      [/^Langkah (\d+)$/, (_, n) => wording(`Step ${n}`, `第${n}步`)],
+      [/^Info (.+)$/, (_, label) => wording(`About ${translate(label)}`, `关于${translate(label)}`)],
+      [/^Hapus (.+)$/, (_, id) => wording(`Remove ${id}`, `删除${id}`)],
+      [/^(.+%) dari nilai barang setelah diskon$/, (_, n) => wording(`${n} of discounted product value`, `折后商品金额的${n}`)],
+      [/^Margin produk sebelum iklan: (.+)$/, (_, n) => wording(`Product margin before ads: ${n}`, `商品广告前利润率：${n}`)],
+      [/^Harga (.+) · HPP (.+) · target (.+)$/, (_, price, cost, target) => wording(`Price ${price} · COGS ${cost} · target ${target}`, `售价${price} · 商品成本${cost} · 目标${target}`)],
+      [/^([\d.,]+) hari$/, (_, n) => wording(`${n} days`, `${n}天`)],
+      [/^([\d.,]+) unit$/, (_, n) => wording(`${n} units`, `${n}件`)]
     ];
     for (const [pattern, replacement] of patterns) {
       if (pattern.test(value)) { translated = value.replace(pattern, replacement); break; }
@@ -779,7 +780,7 @@ function translate(text) {
 const localizedNodes = new WeakMap();
 const localizedAttributes = new WeakMap();
 function localizeUI() {
-  document.documentElement.lang = activeLanguage;
+  document.documentElement.lang = activeLanguage === 'zh' ? 'zh-Hans' : activeLanguage;
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
   while (walker.nextNode()) {
     const node = walker.currentNode;
@@ -808,7 +809,7 @@ function localizeUI() {
   if (select) select.value = activeLanguage;
 }
 function setLanguage(language) {
-  if (!['id','en'].includes(language)) return;
+  if (!['id','en','zh'].includes(language)) return;
   activeLanguage = language;
   try { localStorage.setItem(LANGUAGE_KEY, language); } catch (_) { /* Still switch for this visit. */ }
   if (typeof recalc === 'function') recalc();

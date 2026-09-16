@@ -24,7 +24,7 @@ Cari IP Mac dengan `ipconfig getifaddr en0`, lalu buka `http://IP-MAC:4173` di b
 
 Navigasi bawah muncul di layar sampai 880px, dengan akses Beranda, Jualan, Toko, dan semua menu. Tabel diskon/retur menjadi kartu sampai 600px. Form memakai ukuran sentuh yang lebih besar, keyboard angka, dan modal yang dapat digulir. Data tersimpan tetap mengikuti browser dan alamat website; data Mac tidak otomatis tersinkron ke HP.
 
-Tidak membutuhkan npm atau build. HTML berisi engine kalkulasi dan workbook bawaan; `web/workspace.css` dan `web/workspace.js` mengatur alur, bantuan input, dan navigasi. `web/mobile.css` mengatur pengalaman HP dan tablet. `web/theme.css` mengatur palet TikTok Shop, sementara `web/i18n.js` menyediakan terjemahan lokal. Sertakan seluruh folder `web/`, termasuk ilustrasi di `web/assets/`, jika memindahkan website.
+Tidak membutuhkan npm atau build. HTML berisi engine kalkulasi dan workbook bawaan; `web/workspace.css` dan `web/workspace.js` mengatur alur, bantuan input, dan navigasi. `web/mobile.css` mengatur pengalaman HP dan tablet. `web/theme.css` mengatur palet TikTok Shop, sementara `web/i18n.js` menyediakan sistem terjemahan lokal dan `web/i18n-zh.js` memuat kamus Mandarin. Sertakan seluruh folder `web/`, termasuk ilustrasi di `web/assets/`, jika memindahkan website.
 
 ## Akses internet — pola Dashboard S1
 
@@ -59,7 +59,7 @@ Dashboard memakai kartu misi, ikon bergaya 3D, dan ilustrasi ecommerce lokal. Pr
 
 ## Bahasa & tema
 
-Pilih **Indonesia / English** pada header. Pilihan bahasa diingat terpisah dari data hitungan. Formulir, navigasi, bantuan, pesan error, template balasan, dan label CSV mengikuti bahasa; angka tetap dalam rupiah dengan pemisah sesuai bahasa. Angka yang sedang diketik, ID internal, dan nilai status tersimpan tidak berubah. Workbook Excel bawaan tetap berbahasa Indonesia, ditandai pada halaman unduhan.
+Pilih **Indonesia / English / 简体中文 (Mandarin sederhana)** pada header. Pilihan bahasa diingat terpisah dari data hitungan. Formulir, navigasi, bantuan, pesan error, template balasan, dan label CSV mengikuti bahasa; angka tetap dalam rupiah dengan pemisah sesuai bahasa. Angka yang sedang diketik, ID internal, dan nilai status tersimpan tidak berubah. Workbook Excel bawaan tetap berbahasa Indonesia, ditandai pada halaman unduhan.
 
 Palet hitam–putih, merah, dan cyan mengacu pada [situs resmi TikTok Shop](https://seller.tiktok.com/), ditinjau 15 September 2026. Nuansa ini diterapkan pada seluruh halaman dan ilustrasi 3D lokal, dengan identitas toolkit sendiri. [Rancangan dan verifikasi](docs/design/language-tiktok-theme.md).
 
