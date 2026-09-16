@@ -11,3 +11,14 @@ Verifikasi:
 - 11 halaman × 4 lebar (320, 768, 1024, 1440) × 2 tema: 88 kombinasi tanpa overflow. Halaman akses 320px juga diperiksa dalam 3 bahasa × 2 tema.
 - Screenshot form gelap desktop, dashboard gelap desktop, kalkulator gelap HP, dan form terang HP diperiksa. Ini emulasi ukuran browser, bukan tes perangkat fisik.
 - Tidak ada warning/error console selama verifikasi.
+
+## Penyempurnaan kontras light mode
+
+Latar memakai gradasi cyan–pink lembut. Kartu memakai garis biru-abu yang lebih jelas dan bayangan ringan; formulir akses memakai bingkai 2px. Input diberi latar abu muda serta garis lebih gelap. Panel hasil tetap bernuansa mint dan bagian proteksi bernuansa pink. Header, sidebar, navigasi langkah, tabel dan dialog mengikuti kontras baru. Seluruh aturan dibatasi pada light mode dan media screen.
+
+Verifikasi perubahan visual:
+- Screenshot formulir dan kalkulator desktop, beranda 1440px, serta kalkulator dan formulir akses 320px diperiksa.
+- Sembilan menu sidebar diperiksa pada 1440px tanpa overflow horizontal. Kalkulator dan formulir akses juga tidak overflow pada 320px.
+- Kalkulator dark mode pada 320px tetap tampil sesuai palet sebelumnya.
+- Ketiga aset publik cocok byte demi byte dengan versi lokal; halaman akses publik menampilkan bingkai 2px dan gradasi baru tanpa warning/error console.
+- Pemeriksaan ukuran menggunakan emulasi browser, bukan perangkat fisik. Tidak ada perubahan JavaScript, perhitungan atau alur akses.

@@ -18,6 +18,37 @@ html[data-theme=light] .visual-chip{background:white;color:var(--ink);border-col
 html[data-theme=light] .access-card{border:1px solid var(--line);box-shadow:0 16px 40px #16182308}
 html[data-theme=light] .brand-symbol{color:white}
 @media screen{
+/* Light surfaces: clearer edges, quiet depth, and soft TikTok accent washes. */
+html[data-theme=light]{--bg:#eef2f7;--line:#c3cdd9;--shadow:0 4px 12px #25354d08,0 14px 32px #25354d08}
+html[data-theme=light] body,
+html[data-theme=light] body:has(.access-shell){background:radial-gradient(ellipse at 0 0,#c9efef 0,transparent 48%),radial-gradient(ellipse at 100% 12%,#fbe0e9 0,transparent 48%),linear-gradient(160deg,#f1f6fa,#e9eef6);background-repeat:no-repeat;min-height:100svh}
+html[data-theme=light] :is(.panel,.model-details,.stat-card,.tool-card,.journey-card,.live-summary,.quest-counter,.sheet-item,.source-card,.protection-card,.mobile-result-card){border:1.5px solid var(--line);box-shadow:var(--shadow)}
+html[data-theme=light] .access-card{border:2px solid #bac8d6;box-shadow:0 5px 0 #d4dfe9,0 20px 48px #24374f14;background:linear-gradient(150deg,#fff 65%,#f4fbfc)}
+html[data-theme=light] :is(.input-wrap,.field select,.field textarea,.access-fields input,.access-fields textarea){border:1.5px solid #8593a3;background:#f6f8fb}
+html[data-theme=light] :is(.access-fields input:hover,.access-fields textarea:hover){border-color:#5c7388}
+html[data-theme=light] .input-wrap:focus-within,
+html[data-theme=light] :is(.access-fields input:focus,.access-fields textarea:focus,.field select:focus,.field textarea:focus){border-color:#007b80;background:white;box-shadow:0 0 0 3px #25bdbb24}
+html[data-theme=light] .access-fields input[aria-invalid=true]{background:#fff3f6;border-color:#b80b3d}
+html[data-theme=light] :is(.language-picker,.theme-toggle,.btn.ghost,.btn.subtle){border-color:#aab7c6;box-shadow:0 2px 3px #25354d08}
+html[data-theme=light] .topbar{background:#f4f7fb;border-bottom:1px solid var(--line)}
+html[data-theme=light] .sidebar{border-right:1.5px solid #bdc9d6;box-shadow:4px 0 18px #25354d04}
+html[data-theme=light] .start-panel{border:1.5px solid #e4b6c5;box-shadow:0 8px 24px #7a334e0b}
+html[data-theme=light] :is(.result-panel,.margin-peek){background:linear-gradient(135deg,#e3f7f1,#effbf9);border:1.5px solid #86bdb6;box-shadow:0 6px 18px #164d470b}
+html[data-theme=light] :is(.intro-tip,.connection-panel,.protection-entry){border:1.5px solid #9ac7c8}
+html[data-theme=light] .protection-input{background:linear-gradient(135deg,#ffedf3,#fff6f8);border:1.5px solid #dfa4b8}
+html[data-theme=light] .compare-grid>div{border:1.5px solid var(--line)}
+html[data-theme=light] .compare-grid .selected{border-color:#80bcb8}
+html[data-theme=light] :is(.journey-nav,.operation-nav){background:#dfe6ef;box-shadow:inset 0 0 0 1px #c2cdd9}
+html[data-theme=light] :is(.journey-step.active,.operation-step.active){box-shadow:0 2px 5px #25354d17}
+html[data-theme=light] .copybox{background:#f1f5fa}
+html[data-theme=light] .data-table th{background:#e8eef5;border-color:#bdc9d6}
+html[data-theme=light] .data-table td{border-color:#cdd6e0}
+html[data-theme=light] :is(.mobile-result-card.good,.data-table tr.good){background:#edf9f4;border-color:#92c4ae}
+html[data-theme=light] :is(.mobile-result-card.bad,.data-table tr.bad){background:#fff0f5;border-color:#d7a2b5}
+html[data-theme=light] .mobile-dock{border-top:1.5px solid #b7c5d4;box-shadow:0 -4px 20px #25354d0c}
+html[data-theme=light] dialog{border:1.5px solid #b9c7d5}
+}
+@media screen{
 html[data-theme=dark]{color-scheme:dark;--ink:#f1f2f7;--sub:#bec0ce;--muted:#a8abba;--green:#65e3dc;--bg:#101014;--line:#383942;--mint:#163e3b;--cyan:#173a3b;--pink:#412332;--yellow:#3b321e;--shop-soft:#30212a;--shadow:0 10px 28px #0002;--surface:#1c1d24;--raised:#272932}
 html[data-theme=dark] body{background:var(--bg);color:var(--ink)}
 html[data-theme=dark] ::selection{color:#101014;background:#65e3dc}
