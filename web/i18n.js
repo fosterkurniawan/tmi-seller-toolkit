@@ -1,5 +1,25 @@
 /* Local, explicit translations. IDs and stored calculator data never change language. */
 const EN = {
+  "Jualan lebih siap.":"Sell with a plan.",
+  "Untung lebih jelas.":"Know your profit.",
+  "Harga, promo, dan proteksi. Satu ruang kerja.":"Pricing, promos, and protection. One workspace.",
+  "Kenali untungmu":"Know your profit",
+  "Hitung proteksimu":"Price your protection",
+  "Alur toolkit":"Your toolkit journey",
+  "Hitung harga":"Price your product",
+  "Uji promo":"Test your promos",
+  "Cek hasil iklan":"Check ad results",
+  "MULAI DI SINI":"START HERE",
+  "Buka ruang kerjamu.":"Your workspace awaits.",
+  "Tiga data singkat, lalu mulai eksplorasi.":"Three quick details, then start exploring.",
+  "Nama kamu":"Your name",
+  "Gunakan nomor Indonesia.":"Use an Indonesian phone number.",
+  "Tentang toko & preferensi":"Store & preferences",
+  "Nama tokomu":"Your store name",
+  "Ceritakan kebutuhan tokomu":"Tell us what your store needs",
+  "Masuk ke toolkit":"Open toolkit",
+  "Akses 12 jam di tab ini · * Wajib diisi":"12-hour access in this tab \u00b7 * Required",
+
   'Premi 0,3% ↓':'Premium 0.3% ↓',
 
   'Unduh Excel (.xlsx)':'Download Excel (.xlsx)',
